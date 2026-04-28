@@ -10,78 +10,111 @@ st.set_page_config(page_title="Scan Eat!", page_icon="🌿", layout="centered")
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
-html, body, [class*="css"] { font-family: 'Noto Sans KR', sans-serif; }
-.main { background-color: #f0faf0; }
+* { font-family: 'Noto Sans KR', sans-serif; }
+.main { background-color: #f5f5f5; }
+header[data-testid="stHeader"] { display: none; }
+
 .top-bar {
-    background: linear-gradient(135deg, #2e7d32, #66bb6a);
-    color: white;
+    background: white;
     text-align: center;
-    padding: 1.2rem;
-    border-radius: 0 0 20px 20px;
-    font-size: 1.5rem;
+    padding: 1rem;
+    font-size: 1.2rem;
     font-weight: bold;
-    margin-bottom: 1.5rem;
+    color: #2e7d32;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 1rem;
 }
-.greeting {
-    text-align: center;
-    font-size: 1.1rem;
-    color: #388e3c;
-    margin-bottom: 1.5rem;
+.greeting-box {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    border-radius: 16px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1.2rem;
+    color: #1b5e20;
+    font-size: 1rem;
 }
-.guide-card {
+.section-card {
     background: white;
     border-radius: 16px;
+    padding: 1.2rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+}
+.section-title {
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 0.8rem;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+}
+.analyze-btn > button {
+    background: #2e7d32 !important;
+    color: white !important;
+    border-radius: 12px !important;
+    border: none !important;
+    padding: 0.7rem !important;
+    font-weight: bold !important;
+    font-size: 1rem !important;
+    width: 100% !important;
+    margin-top: 0.5rem;
+}
+.result-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+}
+.guide-item {
+    background: white;
+    border-radius: 14px;
     padding: 1rem 1.2rem;
     margin-bottom: 0.8rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    box-shadow: 0 1px 5px rgba(0,0,0,0.07);
 }
-.guide-title { font-weight: bold; font-size: 1rem; color: #2e7d32; margin-bottom: 0.5rem; }
-.good { color: #388e3c; }
-.bad { color: #e53935; }
-.result-box {
-    background: white;
-    border-radius: 16px;
-    padding: 1.2rem;
-    margin-top: 1rem;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-}
-.stButton > button {
-    background: linear-gradient(135deg, #2e7d32, #66bb6a);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    padding: 0.7rem;
-    font-size: 1rem;
-    font-weight: bold;
-    width: 100%;
-}
-.stButton > button:hover { background: linear-gradient(135deg, #1b5e20, #43a047); }
+.guide-name { font-weight: bold; font-size: 1rem; margin-bottom: 0.5rem; }
+.good-text { color: #2e7d32; font-size: 0.9rem; margin-bottom: 0.3rem; }
+.bad-text { color: #e53935; font-size: 0.9rem; }
+.check { color: #2e7d32; font-weight: bold; }
+.cross { color: #e53935; font-weight: bold; }
+.footer { text-align:center; color:#bbb; font-size:0.78rem; margin-top:2rem; padding-bottom: 2rem; }
 </style>
 """, unsafe_allow_html=True)
 
 st.markdown('<div class="top-bar">🌿 Scan Eat!</div>', unsafe_allow_html=True)
-st.markdown('<div class="greeting">안녕하세요 👋<br>오늘의 신선도를 확인해볼까요?</div>', unsafe_allow_html=True)
+st.markdown('<div class="greeting-box">안녕하세요 👋<br>오늘의 신선도를 확인해볼까요?</div>', unsafe_allow_html=True)
 
-tab1, tab2 = st.tabs(["🖼️ 사진 업로드", "📷 카메라로 찍기"])
+# 카메라/업로드 탭
+st.markdown('<div class="section-card">', unsafe_allow_html=True)
+st.markdown('<div class="section-title">📷 카메라 스캔</div>', unsafe_allow_html=True)
+camera_photo = st.camera_input("카메라로 농산물을 찍어주세요", label_visibility="collapsed")
+st.markdown('</div>', unsafe_allow_html=True)
+
+st.markdown('<div class="section-card">', unsafe_allow_html=True)
+st.markdown('<div class="section-title">🖼️ 사진 업로드</div>', unsafe_allow_html=True)
+uploaded_file = st.file_uploader("JPG · PNG 이미지 업로드", type=["jpg","jpeg","png"], label_visibility="collapsed")
+st.markdown('</div>', unsafe_allow_html=True)
 
 image = None
 image_bytes = None
 
-with tab1:
-    uploaded_file = st.file_uploader("갤러리에서 선택 (JPG · PNG)", type=["jpg", "jpeg", "png"])
-    if uploaded_file:
-        image = Image.open(uploaded_file)
-        image_bytes = uploaded_file.getvalue()
-
-with tab2:
-    camera_photo = st.camera_input("카메라로 농산물을 찍어주세요")
-    if camera_photo:
-        image = Image.open(camera_photo)
-        image_bytes = camera_photo.getvalue()
+if camera_photo:
+    image = Image.open(camera_photo)
+    image_bytes = camera_photo.getvalue()
+elif uploaded_file:
+    image = Image.open(uploaded_file)
+    image_bytes = uploaded_file.getvalue()
 
 if image:
-    st.image(image, caption="선택된 사진", use_container_width=True)
-    if st.button("🔍 신선도 분석하기"):
+    st.image(image, use_container_width=True)
+
+st.markdown('<div class="analyze-btn">', unsafe_allow_html=True)
+analyze = st.button("🔍 신선도 분석하기", use_container_width=True)
+st.markdown('</div>', unsafe_allow_html=True)
+
+if analyze:
+    if not image:
+        st.warning("사진을 먼저 업로드하거나 촬영해주세요!")
+    else:
         with st.spinner("AI가 분석 중이에요..."):
             image_data = base64.b64encode(image_bytes).decode("utf-8")
             response = client.chat.completions.create(
@@ -103,8 +136,7 @@ if image:
             )
             result = response.choices[0].message.content
             lines = result.strip().split("\n")
-
-            st.markdown('<div class="result-box">', unsafe_allow_html=True)
+            st.markdown('<div class="result-card">', unsafe_allow_html=True)
             st.markdown("### 📊 분석 결과")
             for line in lines:
                 if "농산물 종류" in line:
@@ -127,7 +159,7 @@ if image:
                     st.markdown(f"⏰ {line.strip()}")
             st.markdown('</div>', unsafe_allow_html=True)
 
-st.markdown("---")
+# 가이드
 st.markdown("### 📗 농작물 고르는 가이드")
 
 guides = [
@@ -141,7 +173,7 @@ guides = [
 
 for name, good, bad in guides:
     with st.expander(name):
-        st.markdown(f'<div class="good">✔ ' + " · ".join(good) + '</div>', unsafe_allow_html=True)
-        st.markdown(f'<div class="bad">✘ ' + " · ".join(bad) + '</div>', unsafe_allow_html=True)
+        st.markdown(f'<span class="check">✔ 좋은 것</span><br><span class="good-text">' + " · ".join(good) + '</span>', unsafe_allow_html=True)
+        st.markdown(f'<span class="cross">✘ 피할 것</span><br><span class="bad-text">' + " · ".join(bad) + '</span>', unsafe_allow_html=True)
 
-st.markdown('<p style="text-align:center; color:#aaa; font-size:0.8rem; margin-top:2rem;">🌱 신선한 농산물로 건강한 하루!</p>', unsafe_allow_html=True)
+st.markdown('<div class="footer">🌱 신선한 농산물로 건강한 하루!</div>', unsafe_allow_html=True)
