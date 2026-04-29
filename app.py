@@ -3,7 +3,7 @@ from PIL import Image
 import base64
 from groq import Groq
 
-client = Groq(api_key=“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”)
+client = Groq(api_key="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")
 
 st.set_page_config(page_title=“Scan Eat!”, page_icon=“🌿”, layout=“centered”)
 
