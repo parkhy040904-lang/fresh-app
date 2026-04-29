@@ -47,24 +47,48 @@ body, .main, .block-container { background: #e8ede8 !important; padding: 0 !impo
     margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.3rem;
 }
 
-/* 주요 액션 버튼 - 짙은 초록 */
-button[data-testid="baseButton-primary"] {
+/* 카메라 박스 버튼 */
+.camera-btn-wrap .stButton > button {
+    background: #1a2540 !important; color: white !important;
+    border-radius: 18px !important; border: none !important;
+    padding: 2rem 1rem !important; width: 100% !important;
+    font-size: 1rem !important; font-weight: 700 !important;
+    min-height: 110px !important; box-shadow: none !important;
+    white-space: pre-line !important; line-height: 2 !important;
+    outline: 2px solid #7dcc6a !important; outline-offset: -10px !important;
+}
+.camera-btn-wrap .stButton > button:hover { background: #253454 !important; }
+
+/* 업로드 박스 버튼 */
+.upload-btn-wrap .stButton > button {
+    background: white !important; color: #222 !important;
+    border: 2px dashed #aad4a0 !important; border-radius: 16px !important;
+    padding: 0.9rem 1rem !important; width: 100% !important;
+    font-size: 0.95rem !important; font-weight: 700 !important;
+    min-height: unset !important; box-shadow: none !important;
+    white-space: pre-line !important; line-height: 1.8 !important;
+}
+.upload-btn-wrap .stButton > button:hover { background: #f9fdf9 !important; }
+
+/* 분석 버튼 */
+.analyze-btn-wrap .stButton > button {
     background: #2d5a27 !important; color: white !important;
     border-radius: 14px !important; border: none !important;
     padding: 0.8rem !important; font-size: 1rem !important;
     font-weight: 700 !important; width: 100% !important;
+    min-height: unset !important; box-shadow: none !important;
 }
 
 /* 가이드 버튼 - 흰색 */
-button[data-testid="baseButton-secondary"] {
+.stButton > button {
     background: white !important; color: #222 !important;
     border: 1px solid #e8e8e8 !important; border-radius: 16px !important;
-    padding: 1rem 0.5rem !important; width: 100% !important;
-    font-size: 0.88rem !important; font-weight: 700 !important;
+    padding: 1rem 0.5rem !important; font-size: 0.88rem !important;
+    font-weight: 700 !important; width: 100% !important;
     box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
     min-height: 110px !important;
 }
-button[data-testid="baseButton-secondary"]:hover { background: #f0f7ee !important; }
+.stButton > button:hover { background: #f0f7ee !important; }
 
 .guide-detail {
     background: white; border-radius: 14px;
@@ -94,21 +118,25 @@ st.markdown("""
 
 st.markdown('<div class="app-body">', unsafe_allow_html=True)
 
-# 카메라 섹션
+# 카메라 카드 (박스 자체가 버튼)
 st.markdown('<div class="sec-label">📷 카메라 스캔</div>', unsafe_allow_html=True)
-if st.button("📷 카메라 열기", use_container_width=True, type="primary"):
+st.markdown('<div class="camera-btn-wrap">', unsafe_allow_html=True)
+if st.button("📸\n카메라로 스캔하기\n탭하여 카메라 시작", key="cam_btn", use_container_width=True):
     st.session_state.show_camera = not st.session_state.show_camera
     st.session_state.show_upload = False
+st.markdown('</div>', unsafe_allow_html=True)
 
 camera_photo = None
 if st.session_state.show_camera:
     camera_photo = st.camera_input("📸 촬영", label_visibility="visible")
 
-# 업로드 섹션
+# 업로드 카드 (박스 자체가 버튼)
 st.markdown('<div class="sec-label" style="margin-top:0.8rem;">🖼️ 사진 업로드</div>', unsafe_allow_html=True)
-if st.button("🖼️ 갤러리 열기", use_container_width=True, type="primary"):
+st.markdown('<div class="upload-btn-wrap">', unsafe_allow_html=True)
+if st.button("📁  갤러리에서 선택\nJPG · PNG 이미지 업로드", key="upload_btn", use_container_width=True):
     st.session_state.show_upload = not st.session_state.show_upload
     st.session_state.show_camera = False
+st.markdown('</div>', unsafe_allow_html=True)
 
 uploaded_file = None
 if st.session_state.show_upload:
@@ -125,7 +153,9 @@ if image:
     st.image(image, use_container_width=True)
 
 # 분석 버튼
-analyze = st.button("🔍 신선도 분석하기", use_container_width=True, type="primary")
+st.markdown('<div class="analyze-btn-wrap">', unsafe_allow_html=True)
+analyze = st.button("🔍 신선도 분석하기", use_container_width=True)
+st.markdown('</div>', unsafe_allow_html=True)
 
 if analyze:
     if not image:
