@@ -121,7 +121,7 @@ st.markdown('<div class="app-body">', unsafe_allow_html=True)
 # 카메라 카드 (박스 자체가 버튼)
 st.markdown('<div class="sec-label">📷 카메라 스캔</div>', unsafe_allow_html=True)
 st.markdown('<div class="camera-btn-wrap">', unsafe_allow_html=True)
-if st.button("📸\n카메라로 스캔하기\n탭하여 카메라 시작", key="cam_btn", use_container_width=True):
+if st.button("📸\n탭하여 카메라 시작", key="cam_btn", use_container_width=True):
     st.session_state.show_camera = not st.session_state.show_camera
     st.session_state.show_upload = False
 st.markdown('</div>', unsafe_allow_html=True)
