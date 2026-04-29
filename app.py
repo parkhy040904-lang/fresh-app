@@ -47,50 +47,16 @@ body, .main, .block-container { background: #e8ede8 !important; padding: 0 !impo
     margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.3rem;
 }
 
-/* 카메라/업로드 클릭 버튼 */
-div[data-testid="stButton"] > button.camera-btn {
-    background: #1a2540 !important; color: white !important;
-    border-radius: 18px !important; border: none !important;
-    padding: 2rem 1rem !important; width: 100% !important;
-    font-size: 1rem !important; font-weight: 700 !important;
-    margin-bottom: 0.4rem !important;
-}
-
-.camera-card-html {
-    background: #1a2540; border-radius: 18px;
-    padding: 1.8rem 1rem; text-align: center; color: white;
-    margin-bottom: 0.3rem; cursor: pointer; position: relative;
-}
-.corner { position: absolute; width: 22px; height: 22px; border-color: #7dcc6a; border-style: solid; }
-.tl { top:10px; left:10px; border-width: 3px 0 0 3px; border-radius: 4px 0 0 0; }
-.tr { top:10px; right:10px; border-width: 3px 3px 0 0; border-radius: 0 4px 0 0; }
-.bl { bottom:10px; left:10px; border-width: 0 0 3px 3px; border-radius: 0 0 0 4px; }
-.br { bottom:10px; right:10px; border-width: 0 3px 3px 0; border-radius: 0 0 4px 0; }
-.cam-icon { font-size: 2.2rem; margin-bottom: 0.4rem; }
-.cam-title { font-weight: 700; font-size: 1rem; }
-.cam-sub { font-size: 0.78rem; opacity: 0.6; }
-
-.upload-card-html {
-    background: white; border: 2px dashed #aad4a0; border-radius: 16px;
-    padding: 0.9rem 1rem; display: flex; align-items: center; gap: 0.9rem;
-    margin-bottom: 0.3rem;
-}
-.upload-icon { background: #fff8e1; border-radius: 12px; width:46px; height:46px;
-    display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
-.upload-title { font-weight: 700; font-size: 0.95rem; color: #222; }
-.upload-sub { font-size: 0.78rem; color: #aaa; }
-.upload-arr { margin-left: auto; color: #ccc; font-size: 1.1rem; }
-
-/* 분석 버튼 */
-.stButton > button {
+/* 주요 액션 버튼 - 짙은 초록 */
+button[data-testid="baseButton-primary"] {
     background: #2d5a27 !important; color: white !important;
     border-radius: 14px !important; border: none !important;
     padding: 0.8rem !important; font-size: 1rem !important;
     font-weight: 700 !important; width: 100% !important;
 }
 
-/* 가이드 그리드 버튼 */
-.guide-btn > button {
+/* 가이드 버튼 - 흰색 */
+button[data-testid="baseButton-secondary"] {
     background: white !important; color: #222 !important;
     border: 1px solid #e8e8e8 !important; border-radius: 16px !important;
     padding: 1rem 0.5rem !important; width: 100% !important;
@@ -98,7 +64,7 @@ div[data-testid="stButton"] > button.camera-btn {
     box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
     min-height: 110px !important;
 }
-.guide-btn > button:hover { background: #f0f7ee !important; }
+button[data-testid="baseButton-secondary"]:hover { background: #f0f7ee !important; }
 
 .guide-detail {
     background: white; border-radius: 14px;
@@ -128,43 +94,19 @@ st.markdown("""
 
 st.markdown('<div class="app-body">', unsafe_allow_html=True)
 
-# 카메라 카드 (클릭하면 카메라 열림)
+# 카메라 섹션
 st.markdown('<div class="sec-label">📷 카메라 스캔</div>', unsafe_allow_html=True)
-st.markdown("""
-<div class="camera-card-html">
-  <div class="corner tl"></div><div class="corner tr"></div>
-  <div class="corner bl"></div><div class="corner br"></div>
-  <div class="cam-icon">📸</div>
-  <div class="cam-title">카메라로 스캔하기</div>
-  <div class="cam-sub">탭하여 카메라 시작</div>
-</div>""", unsafe_allow_html=True)
-
-col1, col2 = st.columns(2)
-with col1:
-    if st.button("📷 카메라 열기", use_container_width=True):
-        st.session_state.show_camera = not st.session_state.show_camera
-        st.session_state.show_upload = False
-with col2:
-    if st.button("✕ 취소", use_container_width=True):
-        st.session_state.show_camera = False
+if st.button("📷 카메라 열기", use_container_width=True, type="primary"):
+    st.session_state.show_camera = not st.session_state.show_camera
+    st.session_state.show_upload = False
 
 camera_photo = None
 if st.session_state.show_camera:
     camera_photo = st.camera_input("📸 촬영", label_visibility="visible")
 
-# 업로드 카드
+# 업로드 섹션
 st.markdown('<div class="sec-label" style="margin-top:0.8rem;">🖼️ 사진 업로드</div>', unsafe_allow_html=True)
-st.markdown("""
-<div class="upload-card-html">
-  <div class="upload-icon">📁</div>
-  <div>
-    <div class="upload-title">갤러리에서 선택</div>
-    <div class="upload-sub">JPG · PNG 이미지 업로드</div>
-  </div>
-  <div class="upload-arr">›</div>
-</div>""", unsafe_allow_html=True)
-
-if st.button("🖼️ 갤러리 열기", use_container_width=True):
+if st.button("🖼️ 갤러리 열기", use_container_width=True, type="primary"):
     st.session_state.show_upload = not st.session_state.show_upload
     st.session_state.show_camera = False
 
@@ -183,7 +125,7 @@ if image:
     st.image(image, use_container_width=True)
 
 # 분석 버튼
-analyze = st.button("🔍 신선도 분석하기", use_container_width=True)
+analyze = st.button("🔍 신선도 분석하기", use_container_width=True, type="primary")
 
 if analyze:
     if not image:
@@ -219,15 +161,14 @@ if analyze:
 st.markdown('<div class="sec-label" style="margin-top:1rem;">📗 농작물 고르는 가이드</div>', unsafe_allow_html=True)
 
 guides = [
-    ("🍎", "사과", ["껍질 팽팽·광택 있음","꼭지 싱싱·단단","달콤한 향"], ["물렁·주름진 것","검은 반점·곰팡이"]),
-    ("🥦", "브로콜리", ["짙은 초록색","꽃봉오리 촘촘히 닫힘","줄기 단단"], ["노란색 변색","꽃이 핀 것"]),
-    ("🍅", "토마토", ["선명한 빨간색","눌렀을 때 약간 탄력","꼭지 초록 생기"], ["너무 물렁한 것","갈라지거나 터진 것"]),
-    ("🥕", "당근", ["선명한 주황색","표면 매끄럽고 단단","잎이 선명한 녹색"], ["갈라지거나 물렁","흰 줄기 많은 것"]),
-    ("🍋", "레몬", ["밝고 선명한 노란색","묵직하고 단단","향이 진함"], ["초록빛 남아있고 딱딱","주름 많고 말라있는 것"]),
-    ("🫐", "블루베리", ["진한 보라-파란색","흰 분같은 가루 있음","단단하고 통통함"], ["빨간색 남아있는 것","물컹하거나 즙 나오는 것"]),
+    ("🍉", "수박", ["두드렸을 때 탁한 소리", "줄무늬 선명하고 윤기", "배꼽 작고 건조", "묵직한 무게"], ["두드렸을 때 맑은 소리", "꼭지 없거나 시든 것"]),
+    ("🍎", "사과", ["껍질 팽팽·광택 있음", "꼭지 싱싱·단단", "달콤한 향"], ["물렁·주름진 것", "검은 반점·곰팡이"]),
+    ("🍓", "딸기", ["전체 선명한 빨간색", "꼭지 초록 싱싱", "향 진하고 통통함"], ["흰 부분 남은 미숙한 것", "물컹하거나 즙 새는 것"]),
+    ("🥬", "배추", ["잎 빳빳하고 선명한 초록", "속 꽉 차고 묵직함", "밑동 하얗고 단단"], ["잎 시들고 노란 것", "속 비어 가벼운 것"]),
+    ("🧅", "양파", ["껍질 얇고 광택·건조", "단단하고 묵직함", "목 부분 건조"], ["싹이 난 것", "물렁하거나 냄새 심한 것"]),
+    ("🍃", "무", ["묵직하고 단단함", "껍질 매끄럽고 흰색", "잎 초록 싱싱"], ["바람 들어 가벼운 것", "갈라지거나 물렁한 것"]),
 ]
 
-# 2열 그리드로 버튼 배치
 for i in range(0, len(guides), 2):
     cols = st.columns(2)
     for j, col in enumerate(cols):
@@ -235,15 +176,12 @@ for i in range(0, len(guides), 2):
         if idx < len(guides):
             emoji, name, good, bad = guides[idx]
             with col:
-                st.markdown(f'<div class="guide-btn">', unsafe_allow_html=True)
                 if st.button(f"{emoji}\n{name}\n탭해서 보기", key=f"guide_{idx}", use_container_width=True):
                     if st.session_state.selected_guide == idx:
                         st.session_state.selected_guide = None
                     else:
                         st.session_state.selected_guide = idx
-                st.markdown('</div>', unsafe_allow_html=True)
 
-    # 이 행에 선택된 항목 있으면 상세 바로 아래 표시
     for j in range(2):
         idx = i + j
         if idx < len(guides) and st.session_state.selected_guide == idx:
