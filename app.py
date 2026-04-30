@@ -269,7 +269,7 @@ body{background:#d9f0db;display:flex;justify-content:center;align-items:flex-sta
         </div>
 
         <div class="gc" onclick="this.classList.toggle('open')">
-          <div class="gemo">🥕</div><div class="gname">무</div>
+          <div class="gemo">🫜</div><div class="gname">무</div>
           <div class="gsub">탭해서 보기</div>
           <div class="gdetail">
             <span class="ok">✔ 좋은 것</span><br>
@@ -282,7 +282,7 @@ body{background:#d9f0db;display:flex;justify-content:center;align-items:flex-sta
       </div>
     </div>
 
-    <div style="text-align:center;color:#aaa;font-size:0.78rem;padding:1.5rem 0;">Scan Eat! © 2024</div>
+    <div style="text-align:center;color:#aaa;font-size:0.78rem;padding:1.5rem 0;">Scan Eat! © 2026</div>
 
   </div>
 </div>
