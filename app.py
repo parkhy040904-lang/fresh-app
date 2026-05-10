@@ -415,20 +415,33 @@ async function analyze(src) {
       });
       if (!res.ok) throw new Error('API 오류: ' + res.status);
       const json = await res.json();
-      const text = json.choices[0].message.content;
-      const data = {};
-      text.trim().split('\\n').forEach(line => {
-        const idx = line.indexOf(':');
-        if (idx > -1) data[line.slice(0, idx).trim()] = line.slice(idx + 1).trim();
-      });
-      const produce  = data['농산물 종류'] || '농산물';
-      const scoreRaw = data['신선도 점수'] || '5';
-      const status   = data['상태'] || '보통';
-      const desc     = data['상태 설명'] || '';
-      const storage  = data['보관 방법'] || '';
-      const shelf    = data['예상 남은 기한'] || '';
-      const m = scoreRaw.match(/(\d+)/);
-      const score = m ? parseInt(m[1]) : 5;
+      const raw = json.choices[0].message.content
+        .replace(/\*+/g, '').replace(/#+/g, '').replace(/`+/g, '').trim();
+      const sectionKeys = [
+        {key:'농산물 종류', kws:['농산물','종류','채소','작물','식품','이름']},
+        {key:'신선도 점수', kws:['신선도 점수','신선도','점수']},
+        {key:'상태 설명',   kws:['상태 설명','설명']},
+        {key:'상태',        kws:['상태']},
+        {key:'보관 방법',   kws:['보관','저장']},
+        {key:'예상 남은 기한', kws:['기한','유통','남은']},
+      ];
+      const sections = {}; let curSec = null;
+      for (const line of raw.split('\\n')) {
+        const ci = line.indexOf(':');
+        const k  = ci > -1 ? line.slice(0, ci).trim() : '';
+        const v  = ci > -1 ? line.slice(ci + 1).trim() : line.trim();
+        const matched = sectionKeys.find(s => s.kws.some(kw => k.includes(kw)) && k.length < 20);
+        if (matched) { curSec = matched.key; sections[curSec] = v; }
+        else if (curSec && line.trim()) sections[curSec] += ' ' + line.trim();
+      }
+      const produce  = sections['농산물 종류'] || '농산물';
+      const scoreRaw = sections['신선도 점수'] || '5';
+      const status   = sections['상태'] || '보통';
+      const desc     = sections['상태 설명'] || '';
+      const storage  = sections['보관 방법'] || '';
+      const shelf    = sections['예상 남은 기한'] || '';
+      const m = scoreRaw.match(/([\d.]+)/);
+      const score = m ? Math.round(parseFloat(m[1])) : 5;
       showResult(produce, score, status, desc, storage, shelf);
     } catch(err) {
       document.getElementById('remo').textContent = '❌';
