@@ -118,8 +118,8 @@ body{background:#d9f0db;display:flex;justify-content:center;align-items:flex-sta
 .tag.g{background:#e8f5e9;color:#2e7d32;}
 .tag.y{background:#fff8e1;color:#e65100;}
 .tag.r{background:#fce4ec;color:#b71c1c;}
-.tip{background:#f5fbf5;border-radius:12px;padding:10px 12px;
-  font-size:12px;color:#444;font-weight:600;line-height:1.65;}
+.tip{background:#f5fbf5;border-radius:12px;padding:12px 14px;
+  font-size:12px;color:#444;font-weight:600;line-height:1.8;word-break:keep-all;}
 
 .ggrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .gc{background:#fff;border-radius:18px;padding:16px;
@@ -382,8 +382,9 @@ function showResult(produce, score, status, desc, storage, shelf) {
     '<span class="tag ' + tagCls + '">' + status + '</span>' +
     '<span class="tag" style="background:#f3f3f3;color:#666">AI 분석</span>' +
     '<span class="tag" style="background:#f3f3f3;color:#666">' + score + '/10점</span>';
+  const descHtml = (desc || '분석이 완료됐어요!').replace(/\. /g, '.<br>');
   document.getElementById('rtip').innerHTML =
-    '💡 ' + (desc || '분석이 완료됐어요!') + '<br><br>' +
+    '💡 ' + descHtml + '<br><br>' +
     '🏪 <b>보관법:</b> ' + (storage || '—') + '<br>' +
     '⏰ <b>남은 기한:</b> ' + (shelf || '—');
   document.getElementById('rbox').scrollIntoView({behavior:'smooth', block:'nearest'});
@@ -408,7 +409,7 @@ async function analyze(src) {
             role: 'user',
             content: [
               {type: 'image_url', image_url: {url: 'data:image/jpeg;base64,' + base64}},
-              {type: 'text', text: '이 농산물 사진을 보고 아래 항목을 분석해주세요. 반드시 아래 형식으로만 답하세요:\\n\\n농산물 종류:\\n신선도 점수: (숫자/10)\\n상태: (신선/보통/주의/부패 중 하나)\\n상태 설명:\\n보관 방법:\\n예상 남은 기한: '}
+              {type: 'text', text: '이 농산물 사진을 보고 아래 항목을 분석해주세요. 반드시 아래 형식으로만 답하세요:\\n\\n농산물 종류:\\n신선도 점수: (숫자/10)\\n상태: (신선/보통/주의/부패 중 하나)\\n상태 설명: (색상, 표면 상태, 탄력감, 이상 여부 등 관찰한 근거를 구체적으로 3~4문장으로 서술)\\n보관 방법:\\n예상 남은 기한: '}
             ]
           }]
         })
